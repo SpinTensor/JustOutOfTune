@@ -8,19 +8,8 @@ pub struct Interval {
     pub frequency_scale: Rational,
 }
 
+// all other intervals are constructable from theese three
 impl Interval {
-    pub fn unison() -> Self {
-        Interval::new(0, (1, 1))
-    }
-    pub fn minor_second() -> Self {
-        Interval::new(1, (16,15))
-    }
-    pub fn major_second() -> Self {
-        Interval::new(2, (9, 8))
-    }
-    pub fn minor_third() -> Self {
-        Interval::new(3, (6, 5))
-    }
     pub fn major_third() -> Self {
         Interval::new(4, (5, 4))
     }
@@ -29,21 +18,6 @@ impl Interval {
     }
     pub fn perfect_fifth() -> Self {
         Interval::new(7, (3, 2))
-    }
-    pub fn minor_sixth() -> Self {
-        Interval::new(8, (8, 5))
-    }
-    pub fn major_sixth() -> Self {
-        Interval::new(9, (5, 3))
-    }
-    pub fn minor_seventh() -> Self {
-        Interval::new(10, (16, 9))
-    }
-    pub fn major_seventh() -> Self {
-        Interval::new(11, (15, 8))
-    }
-    pub fn perfect_octave() -> Self {
-        Interval::new(12, (2, 1))
     }
 }
 
