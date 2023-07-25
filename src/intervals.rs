@@ -4,7 +4,7 @@ use rug::Rational;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Interval {
-    pub half_tone_steps: i8,
+    pub half_tone_steps: i32,
     pub frequency_scale: Rational,
 }
 
@@ -22,7 +22,7 @@ impl Interval {
 }
 
 impl Interval {
-    pub fn new(half_tone_steps: i8, frequency_scale: (u8, u8)) -> Interval {
+    pub fn new(half_tone_steps: i32, frequency_scale: (i32, i32)) -> Interval {
         Interval {
             half_tone_steps,
             frequency_scale: Rational::from(frequency_scale)

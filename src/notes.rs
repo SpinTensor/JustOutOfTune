@@ -176,25 +176,25 @@ impl Notes {
         }
     }
 
-    pub fn raise(&self, steps: u8) -> Self {
+    pub fn raise(&self, steps: u32) -> Self {
         match steps {
             0 => self.same(),
             _ => self.next().raise(steps-1)
         }
     }
 
-    pub fn lower(&self, steps: u8) -> Self {
+    pub fn lower(&self, steps: u32) -> Self {
         match steps {
             0 => self.same(),
             _ => self.prev().lower(steps-1)
         }
     }
 
-    pub fn shift(&self, steps: i8) -> Self {
+    pub fn shift(&self, steps: i32) -> Self {
         match steps.cmp(&0) {
-            Ordering::Less => self.lower(-steps as u8),
+            Ordering::Less => self.lower(-steps as u32),
             Ordering::Equal => self.same(),
-            Ordering::Greater => self.raise(steps as u8)
+            Ordering::Greater => self.raise(steps as u32)
         }
     }
 
