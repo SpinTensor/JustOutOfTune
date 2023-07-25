@@ -1,5 +1,5 @@
-use std::ops::{Neg, Add, Sub};
-use num_traits::Inv;
+use std::ops::{Neg, Add, Sub, Mul, AddAssign};
+use num_traits::{Inv, Pow};
 use rug::Rational;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -63,6 +63,19 @@ fn addition() {
     let interval_b = Interval::perfect_fifth();
     let interval_c = interval_a + interval_b;
     assert_eq!(interval_c, Interval::new(11, (15, 8)));
+}
+
+impl AddAssign for Interval {
+    fn add_assign(&mut self, other: Self) {
+        self.half_tone_steps += other.half_tone_steps;
+        self.frequency_scale *= other.frequency_scale;
+    }
+}
+#[test]
+fn assign_addition() {
+    let mut interval = Interval::major_third();
+    interval += Interval::perfect_fifth();
+    assert_eq!(interval, Interval::new(11, (15, 8)));
 }
 
 impl Sub for Interval {
