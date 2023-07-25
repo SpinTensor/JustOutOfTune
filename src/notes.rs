@@ -1,8 +1,8 @@
 use std::cmp::Ordering;
 use crate::intervals::Interval;
 
-#[derive(Debug, PartialEq)]
-enum Notes {
+#[derive(Debug, PartialEq, Copy, Clone)]
+pub enum Notes {
     C,
     CSharp,
     D,
