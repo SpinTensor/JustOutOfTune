@@ -109,7 +109,13 @@ impl Mul<i32> for Interval {
 #[test]
 fn multiplication() {
     let interval_a = Interval::major_third();
+    assert_eq!(interval_a.clone()*0, Interval::new(0, (1,1)));
+
     assert_eq!(interval_a.clone()*1, Interval::major_third());
     assert_eq!(interval_a.clone()*2, Interval::major_third()+Interval::major_third());
     assert_eq!(interval_a.clone()*3, Interval::major_third()+Interval::major_third()+Interval::major_third());
+
+    assert_eq!(interval_a.clone()*(-1), -Interval::major_third());
+    assert_eq!(interval_a.clone()*(-2), -Interval::major_third()+(-Interval::major_third()));
+    assert_eq!(interval_a.clone()*(-3), -Interval::major_third()+(-Interval::major_third())+(-Interval::major_third()));
 }
