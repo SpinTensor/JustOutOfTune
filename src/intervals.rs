@@ -95,3 +95,21 @@ fn subtraction() {
     let interval_c = interval_a - interval_b;
     assert_eq!(interval_c, Interval::major_third());
 }
+
+impl Mul<i32> for Interval {
+    type Output = Self;
+
+    fn mul(self, other: i32) -> Self::Output {
+        Self {
+            half_tone_steps: self.half_tone_steps*other,
+            frequency_scale: self.frequency_scale.pow(other)
+        }
+    }
+}
+#[test]
+fn multiplication() {
+    let interval_a = Interval::major_third();
+    assert_eq!(interval_a.clone()*1, Interval::major_third());
+    assert_eq!(interval_a.clone()*2, Interval::major_third()+Interval::major_third());
+    assert_eq!(interval_a.clone()*3, Interval::major_third()+Interval::major_third()+Interval::major_third());
+}
