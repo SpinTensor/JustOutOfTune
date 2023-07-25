@@ -43,7 +43,7 @@ impl Neg for Interval {
 #[test]
 fn negate() {
     let interval = Interval::new(1, (2,3));
-    let neginterval = interval.clone().neg();
+    let neginterval = -interval.clone();
     assert_eq!(neginterval, Interval::new(-1, (3,2)));
 }
 
