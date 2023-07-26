@@ -1,4 +1,4 @@
-use std::ops::Add;
+use std::ops::{Add, AddAssign};
 use rug::Rational;
 use crate::intervals::Interval;
 use crate::notes::Notes;
@@ -81,6 +81,31 @@ fn addition() {
     sequence = sequence + Interval::perfect_fifth();
     let ref_sequence = IntervalSequence {
         intervals: vec![Interval::major_third(), Interval::perfect_fourth(), Interval::perfect_fifth()]
+    };
+    assert_eq!(sequence, ref_sequence);
+}
+
+impl AddAssign for IntervalSequence {
+    fn add_assign(&mut self, other: Self) {
+        for iinterval in other.intervals.iter() {
+            self.intervals.push(iinterval.clone());
+        }
+    }
+}
+#[test]
+fn assign_addition() {
+    let mut sequence = IntervalSequence::new();
+    sequence = sequence + Interval::major_third();
+    sequence = sequence + Interval::perfect_fourth();
+    sequence = sequence + Interval::perfect_fifth();
+    let mut other_sequence = IntervalSequence::new();
+    other_sequence = other_sequence + Interval::perfect_fourth();
+    other_sequence = other_sequence + Interval::perfect_fifth();
+    other_sequence = other_sequence + Interval::major_third();
+    sequence += other_sequence.clone();
+    let ref_sequence = IntervalSequence {
+        intervals: vec![Interval::major_third(), Interval::perfect_fourth(), Interval::perfect_fifth(),
+                        Interval::perfect_fourth(), Interval::perfect_fifth(), Interval::major_third()]
     };
     assert_eq!(sequence, ref_sequence);
 }
