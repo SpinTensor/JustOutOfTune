@@ -1,6 +1,7 @@
 mod notes;
 mod intervals;
 mod interval_sequences;
+mod interval_set;
 
 use clap::Parser;
 use intervals::Interval;
