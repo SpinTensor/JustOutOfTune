@@ -123,31 +123,31 @@ impl IntervalSet {
         let mut interval_seq = IntervalSequence::new();
         //major_thirds
         if self.n_major_third > 0 {
-            for iinterval in 0..self.n_major_third {
+            for _ in 0..self.n_major_third {
                 interval_seq = interval_seq + Interval::major_third();
             }
         } else {
-            for iinterval in 0..self.n_major_third.abs() {
+            for _ in 0..self.n_major_third.abs() {
                 interval_seq = interval_seq + (-Interval::major_third());
             }
         }
         //perfect_fourth
         if self.n_perfect_fourth > 0 {
-            for iinterval in 0..self.n_perfect_fourth {
+            for _ in 0..self.n_perfect_fourth {
                 interval_seq = interval_seq + Interval::perfect_fourth();
             }
         } else {
-            for iinterval in 0..self.n_perfect_fourth.abs() {
+            for _ in 0..self.n_perfect_fourth.abs() {
                 interval_seq = interval_seq + (-Interval::perfect_fourth());
             }
         }
         //perfect_fifth
         if self.n_perfect_fifth > 0 {
-            for iinterval in 0..self.n_perfect_fifth {
+            for _ in 0..self.n_perfect_fifth {
                 interval_seq = interval_seq + Interval::perfect_fifth();
             }   
         } else {
-            for iinterval in 0..self.n_perfect_fifth.abs() {
+            for _ in 0..self.n_perfect_fifth.abs() {
                 interval_seq = interval_seq + (-Interval::perfect_fifth());
             }   
         }
