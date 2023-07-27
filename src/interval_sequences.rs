@@ -111,7 +111,7 @@ fn assign_addition() {
 }
 
 impl IntervalSequence {
-    fn to_notes(&self, startingnote: Notes) -> Vec<Notes> {
+    pub fn to_notes(&self, startingnote: Notes) -> Vec<Notes> {
         let mut total_interval = Interval::new(0, (1,1));
         let mut note_sequence = Vec::new();
         note_sequence.push(startingnote);
