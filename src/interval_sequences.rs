@@ -34,6 +34,45 @@ impl IntervalSequence {
         }
         interval.frequency_scale
     }
+
+    pub fn clean(&self) -> Self {
+        let nthird = self.intervals.iter().filter(|&x| *x == Interval::major_third()).count();
+        let nithird = self.intervals.iter().filter(|&x| *x == (-Interval::major_third())).count();
+        let nfourth = self.intervals.iter().filter(|&x| *x == Interval::perfect_fourth()).count();
+        let nifourth = self.intervals.iter().filter(|&x| *x == (-Interval::perfect_fourth())).count();
+        let nfifth = self.intervals.iter().filter(|&x| *x == Interval::perfect_fifth()).count();
+        let nififth = self.intervals.iter().filter(|&x| *x == (-Interval::perfect_fifth())).count();
+        let mut cleaned_sequence = IntervalSequence::new();
+        if nthird > nithird {
+            for _ in nithird..nthird {
+                cleaned_sequence = cleaned_sequence + Interval::major_third();
+            }
+        } else {
+            for _ in nthird.. nithird {
+                cleaned_sequence = cleaned_sequence + (-Interval::major_third());
+            }
+        }
+        if nfourth > nifourth {
+            for _ in nifourth..nfourth {
+                cleaned_sequence = cleaned_sequence + Interval::perfect_fourth();
+            }
+        } else {
+            for _ in nfourth.. nifourth {
+                cleaned_sequence = cleaned_sequence + (-Interval::perfect_fourth());
+            }
+        }
+        if nfifth > nififth {
+            for _ in nififth..nfifth {
+                cleaned_sequence = cleaned_sequence + Interval::perfect_fifth();
+            }
+        } else {
+            for _ in nfifth.. nififth {
+                cleaned_sequence = cleaned_sequence + (-Interval::perfect_fifth());
+            }
+        }
+
+        cleaned_sequence
+    }
 }
 
 #[test]
@@ -62,6 +101,25 @@ fn frequency_scale() {
                  + (-Interval::perfect_fourth())
                  + Interval::perfect_fifth();
     assert_eq!(sequence.frequency_scale(), Rational::from((45,32)));
+}
+
+#[test]
+fn clean() {
+    let sequence = IntervalSequence::new()
+                   + Interval::major_third()
+                   + Interval::major_third()
+                   + (-Interval::perfect_fourth())
+                   + Interval::perfect_fifth()
+                   + Interval::perfect_fifth()
+                   + Interval::perfect_fifth()
+                   + (-Interval::perfect_fifth())
+                   + (-Interval::major_third())
+                   + Interval::perfect_fourth();
+    let ref_sequence = IntervalSequence::new()
+                     + Interval::major_third()
+                     + Interval::perfect_fifth()
+                     + Interval::perfect_fifth();
+    assert_eq!(sequence.clean(), ref_sequence);
 }
 
 impl Add<Interval> for IntervalSequence {
