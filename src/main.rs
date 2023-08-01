@@ -32,9 +32,9 @@ fn main() {
     let args = Args::parse();
 
     println!("Starting out-of-tune sequence search with:");
-    println!("   Number of half steps:      {:6}", args.nhalf_steps);
-    println!("   Target frequency scaling:  {:6.1}", args.freq_scale);
-    println!("   Max scaling error (cents): {:6.1}", args.err_freq_scale);
+    println!("   Number of half steps:      {:10}", args.nhalf_steps);
+    println!("   Target frequency scaling:  {:10.3}", args.freq_scale);
+    println!("   Max scaling error (cents): {:10.3}", args.err_freq_scale);
     println!();
 
     let mut interval_seq = IntervalSequence::new();
@@ -81,6 +81,7 @@ fn main() {
         print!("{:4}", iinterval.frequency_scale);
     }
     println!();
+    println!();
 
     // compute the scaling error
     let to_cent = | x: f64 | -> f64 {1200.0*x.abs().log2()};
@@ -88,8 +89,6 @@ fn main() {
     let mut sequence_freq_scale_cent = to_cent(interval_seq.frequency_scale().to_f64());
     let mut scale_err_cent = (target_freq_scale_cent-sequence_freq_scale_cent).abs();
 
-    sequence_freq_scale_cent = to_cent(interval_seq.frequency_scale().to_f64());
-    scale_err_cent = (target_freq_scale_cent-sequence_freq_scale_cent).abs();
     loop {
         let freq_scale = interval_seq.frequency_scale();
         if freq_scale == args.freq_scale ||
@@ -106,5 +105,18 @@ fn main() {
         scale_err_cent = (target_freq_scale_cent-sequence_freq_scale_cent).abs();
     }
 
-    dbg!(interval_seq.to_notes(Notes::C).len());
+    println!("Found Sequence:");
+    println!("   Number of intervals:   {}", interval_seq.intervals.len());
+    println!("   Scaling frequency:     {:}", interval_seq.frequency_scale().to_f64());
+    println!("   Scaling error (cents): {:}", scale_err_cent);
+
+    let interval_seq = interval_seq.clean();
+    println!("Cleaned Sequence: ");
+    println!("   Number of intervals:   {}", interval_seq.intervals.len());
+    println!("   Scaling frequency:     {}", interval_seq.frequency_scale().to_f64());
+    println!("   Scaling error (cents): {}", scale_err_cent);
+
+    
+    let note_sequence = interval_seq.to_notes(Note::new("C", 3));
+
 }
