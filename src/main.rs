@@ -1,12 +1,13 @@
+mod notevalues;
 mod notes;
 mod intervals;
 mod interval_sequences;
 mod interval_set;
 
 use clap::Parser;
-use notes::Notes;
-use interval_sequences::IntervalSequence;
-use interval_set::IntervalSet;
+use crate::notes::Note;
+use crate::interval_sequences::IntervalSequence;
+use crate::interval_set::IntervalSet;
 
 /// Compute just intonated interval sequences that drift in tuning
 #[derive(Parser, Debug)]

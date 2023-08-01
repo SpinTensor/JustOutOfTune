@@ -1,7 +1,7 @@
 use std::ops::{Add, AddAssign};
 use rug::Rational;
 use crate::intervals::Interval;
-use crate::notevalues::NoteValues;
+use crate::notes::Note;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct IntervalSequence {
@@ -169,7 +169,7 @@ fn assign_addition() {
 }
 
 impl IntervalSequence {
-    pub fn to_notes(&self, startingnote: NoteValues) -> Vec<NoteValues> {
+    pub fn to_notes(&self, startingnote: Note) -> Vec<Note> {
         let mut total_interval = Interval::new(0, (1,1));
         let mut note_sequence = Vec::new();
         note_sequence.push(startingnote);
@@ -184,12 +184,12 @@ impl IntervalSequence {
 }
 #[test]
 fn to_note_squence() {
-    let startingnote = NoteValues::C;
+    let startingnote = Note::new("C", 3);
     let sequence = IntervalSequence::new()
                  + Interval::major_third()
                  + (-Interval::perfect_fourth())
                  + Interval::perfect_fifth();
 
     let note_sequence = sequence.to_notes(startingnote);
-    assert_eq!(note_sequence, vec![NoteValues::C, NoteValues::E, NoteValues::B, NoteValues::FSharp]);
+    assert_eq!(note_sequence, vec![Note::new("C", 3), Note::new("E", 3), Note::new("B", 2), Note::new("F#", 3)]);
 }
