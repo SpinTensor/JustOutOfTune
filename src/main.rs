@@ -3,23 +3,25 @@ mod notes;
 mod intervals;
 mod interval_sequences;
 mod interval_set;
+mod vector_distributor;
 
 use clap::Parser;
 use crate::notes::Note;
 use crate::interval_sequences::IntervalSequence;
 use crate::interval_set::IntervalSet;
+use crate::vector_distributor::distribute;
 
 /// Compute just intonated interval sequences that drift in tuning
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Frequency scaling parameter
-    #[arg(short, long, default_value_t = 1.0)]
+    #[arg(long, default_value_t = 1.0)]
     freq_scale: f64,
 
     /// Error of freq_scale in cents (1/100 half step)
-    #[arg(short, long, default_value_t = 1.0)]
-    err_freq_scale: f64,
+    #[arg(long, default_value_t = 1.0)]
+    freq_scale_err: f64,
 
     /// Number of half steps
     #[arg(short, long, default_value_t = 0)]
@@ -34,7 +36,7 @@ fn main() {
     println!("Starting out-of-tune sequence search with:");
     println!("   Number of half steps:      {:10}", args.nhalf_steps);
     println!("   Target frequency scaling:  {:10.3}", args.freq_scale);
-    println!("   Max scaling error (cents): {:10.3}", args.err_freq_scale);
+    println!("   Max scaling error (cents): {:10.3}", args.freq_scale_err);
     println!();
 
     let mut interval_seq = IntervalSequence::new();
@@ -92,7 +94,7 @@ fn main() {
     loop {
         let freq_scale = interval_seq.frequency_scale();
         if freq_scale == args.freq_scale ||
-           scale_err_cent <= args.err_freq_scale {
+           scale_err_cent <= args.freq_scale_err {
             break;
         } else if freq_scale > args.freq_scale {
             // add interval sets that add 0 half steps until the freq_scale is smaller than the target
@@ -110,13 +112,22 @@ fn main() {
     println!("   Scaling frequency:     {:}", interval_seq.frequency_scale().to_f64());
     println!("   Scaling error (cents): {:}", scale_err_cent);
 
-    let interval_seq = interval_seq.clean();
+    let mut interval_seq = interval_seq.clean();
     println!("Cleaned Sequence: ");
     println!("   Number of intervals:   {}", interval_seq.intervals.len());
     println!("   Scaling frequency:     {}", interval_seq.frequency_scale().to_f64());
     println!("   Scaling error (cents): {}", scale_err_cent);
 
-    
-    let note_sequence = interval_seq.to_notes(Note::new("C", 3));
+    println!("Distributing intervals equally among the sequence.");
+    distribute(&mut interval_seq.intervals);
 
+    print!("List of notes that correspond to the interval sequence:");
+    let note_sequence = interval_seq.to_notes(Note::new("C", 3));
+    for (inote, note) in note_sequence.iter().enumerate() {
+        if inote % 20 == 0 {
+            println!();
+        }
+        print!(" {}", note);
+    }
+    println!();
 }
