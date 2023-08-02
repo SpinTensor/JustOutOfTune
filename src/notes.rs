@@ -1,3 +1,4 @@
+use std::fmt;
 use std::cmp::Ordering;
 use crate::intervals::Interval;
 use crate::notevalues::NoteValues;
@@ -11,10 +12,7 @@ pub struct Note {
 impl Note {
     pub fn new(s: &str, octave: i32) -> Self {
         let val = NoteValues::from_str(s).unwrap();
-        Note {
-            val: val,
-            octave
-        }
+        Note {val, octave}
     }
 
     pub fn next(&self) -> Self {
@@ -147,4 +145,15 @@ fn shift() {
 #[test]
 fn shift_by_interval() {
     assert_eq!(Note::new("C", 3).shift_by_interval(Interval::perfect_fifth()), Note::new("G", 3));
+}
+
+impl fmt::Display for Note {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if self.val.to_str().len() == 1 {
+            write!(f, " {}{}", self.val.to_str(), self.octave)
+        } else {
+            write!(f, "{}{}", self.val.to_str(), self.octave)
+        }
+
+    }
 }
