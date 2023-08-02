@@ -2,7 +2,7 @@ use std::ops::{Neg, Add, Sub, Mul, AddAssign};
 use num_traits::{Inv, Pow};
 use rug::Rational;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub struct Interval {
     pub half_tone_steps: i32,
     pub frequency_scale: Rational,
