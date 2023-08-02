@@ -39,17 +39,12 @@ pub fn distribute<T>(list: &mut Vec<T>) where T: Clone + std::cmp::Eq + std::has
     for ival in remove_duplicates(list.to_vec()).iter() {
         let value = ival;
         let count = list.iter().filter(|x| *x == value).count();
-        if count > 0 {
-            let freq = list.len() as f64 / count as f64;
-            let prio = freq/2.0;
-            put_on_heap(&mut prioheap,
-                PrioItem {
-                    value: value.clone(),
-                    count: count,
-                    freq: freq,
-                    prio: prio
-                });
-        }
+        let freq = list.len() as f64 / count as f64;
+        let prio = freq/2.0;
+        put_on_heap(&mut prioheap,
+            PrioItem {
+                value: value.clone(), count, freq, prio
+            });
     }
 
     list.clear();
