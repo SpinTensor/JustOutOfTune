@@ -33,7 +33,11 @@ struct Args {
 
     /// Starting octave
     #[arg(long, default_value_t = 3)]
-    starting_octave: i32
+    starting_octave: i32,
+
+    /// Split notes for instruments
+    #[arg(long, default_value_t = false)]
+    split_note_sequence: bool,
 }
 
 fn main() {
@@ -138,4 +142,30 @@ fn main() {
         print!(" {}", note);
     }
     println!();
+
+    if args.split_note_sequence {
+        println!();
+        print!("Instrument 1:");
+        for (inote, note) in note_sequence.iter().enumerate() {
+            if inote % 20 == 0 {
+                println!();
+            }
+            if inote % 2 == 0 {
+                print!(" {}", note);
+            }
+        }
+        println!();
+
+        println!();
+        print!("Instrument 2:");
+        for (inote, note) in note_sequence.iter().enumerate() {
+            if inote % 20 == 0 {
+                println!();
+            }
+            if (inote+1) % 2 == 0 {
+                print!(" {}", note);
+            }
+        }
+        println!();
+    }
 }
