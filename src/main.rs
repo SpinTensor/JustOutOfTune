@@ -24,9 +24,16 @@ struct Args {
     freq_scale_err: f64,
 
     /// Number of half steps
-    #[arg(short, long, default_value_t = 0)]
+    #[arg(long, default_value_t = 0)]
     nhalf_steps: i32,
 
+    /// Starting note name
+    #[arg(long, default_value_t = String::from("C"))]
+    starting_note: String,
+
+    /// Starting octave
+    #[arg(long, default_value_t = 3)]
+    starting_octave: i32
 }
 
 fn main() {
@@ -37,6 +44,7 @@ fn main() {
     println!("   Number of half steps:      {:10}", args.nhalf_steps);
     println!("   Target frequency scaling:  {:10.3}", args.freq_scale);
     println!("   Max scaling error (cents): {:10.3}", args.freq_scale_err);
+    println!("   Starting note and octave   {:>9}{:1}", args.starting_note, args.starting_octave);
     println!();
 
     let mut interval_seq = IntervalSequence::new();
@@ -122,7 +130,7 @@ fn main() {
     distribute(&mut interval_seq.intervals);
 
     print!("List of notes that correspond to the interval sequence:");
-    let note_sequence = interval_seq.to_notes(Note::new("C", 3));
+    let note_sequence = interval_seq.to_notes(Note::new(&args.starting_note, args.starting_octave));
     for (inote, note) in note_sequence.iter().enumerate() {
         if inote % 20 == 0 {
             println!();
