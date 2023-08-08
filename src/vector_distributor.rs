@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 fn remove_duplicates<T>(list: Vec<T>) -> Vec<T> where T: Clone + std::cmp::Eq + std::hash::Hash + std::fmt::Debug {
     let mut seen = HashSet::new();
-    let mut uniques = list.clone();
+    let mut uniques = list;
     uniques.retain(|c| seen.insert(c.clone()));
     uniques
 }
@@ -48,17 +48,12 @@ pub fn distribute<T>(list: &mut Vec<T>) where T: Clone + std::cmp::Eq + std::has
     }
 
     list.clear();
-    loop {
-        match prioheap.pop() {
-            Some(mut prioitem) => {
-                list.push(prioitem.value.clone());
-                prioitem.count -= 1;
-                prioitem.prio += prioitem.freq;
-                if prioitem.count > 0 {
-                    put_on_heap(&mut prioheap, prioitem);
-                }
-            },
-            None => break
+    while let Some(mut prioitem) = prioheap.pop() {
+        list.push(prioitem.value.clone());
+        prioitem.count -= 1;
+        prioitem.prio += prioitem.freq;
+        if prioitem.count > 0 {
+            put_on_heap(&mut prioheap, prioitem);
         }
     }
 }

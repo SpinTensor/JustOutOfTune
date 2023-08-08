@@ -1,6 +1,6 @@
 use std::fmt;
 use std::cmp::Ordering;
-use crate::intervals::Interval;
+use crate::just_intervals::JustInterval;
 use crate::notevalues::NoteValues;
 
 #[derive(Debug, PartialEq, Copy, Clone)]
@@ -39,14 +39,14 @@ impl Note {
 
     pub fn lower(&self, steps: u32) -> Self {
         match steps {
-            0 => self.clone(),
+            0 => *self,
             _ => self.prev().lower(steps-1)
         }
     }
 
     pub fn raise(&self, steps: u32) -> Self {
         match steps {
-            0 => self.clone(),
+            0 => *self,
             _ => self.next().raise(steps-1)
         }
     }
@@ -54,13 +54,13 @@ impl Note {
     pub fn shift(&self, steps: i32) -> Self {
         match steps.cmp(&0) {
             Ordering::Less => self.lower(-steps as u32),
-            Ordering::Equal => self.clone(),
+            Ordering::Equal => *self,
             Ordering::Greater => self.raise(steps as u32)
         }
     }
 
-    pub fn shift_by_interval(&self, intv: Interval) -> Self {
-        self.shift(intv.half_tone_steps)
+    pub fn shift_by_interval(&self, intv: JustInterval) -> Self {
+        self.shift(intv.get_half_steps())
     }
 
 }
@@ -144,7 +144,7 @@ fn shift() {
 
 #[test]
 fn shift_by_interval() {
-    assert_eq!(Note::new("C", 3).shift_by_interval(Interval::perfect_fifth()), Note::new("G", 3));
+    assert_eq!(Note::new("C", 3).shift_by_interval(JustInterval::PerfectFifth), Note::new("G", 3));
 }
 
 impl fmt::Display for Note {
