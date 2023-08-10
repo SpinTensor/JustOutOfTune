@@ -134,20 +134,16 @@ impl IntervalSet {
     }
 
     pub fn to_interval_sequence(&self) -> IntervalSequence {
+        let element_counts = vec![
+            (self.n_major_third.abs() as usize,    JustInterval::MajorThird*self.n_major_third),
+            (self.n_perfect_fourth.abs() as usize, JustInterval::PerfectFourth*self.n_perfect_fourth),
+            (self.n_perfect_fifth.abs() as usize,  JustInterval::PerfectFifth*self.n_perfect_fifth)];
         let mut interval_seq = IntervalSequence::new();
-        //major_thirds
-        for _ in 0..self.n_major_third.abs() {
-            interval_seq.add_interval(JustInterval::MajorThird*self.n_major_third);
-        }
-        //perfect_fourth
-        for _ in 0..self.n_perfect_fourth.abs() {
-            interval_seq.add_interval(JustInterval::PerfectFourth*self.n_perfect_fourth);
-        }
-        //perfect_fifth
-        for _ in 0..self.n_perfect_fifth.abs() {
-            interval_seq.add_interval(JustInterval::PerfectFifth*self.n_perfect_fifth);
-        }
-        distribute(&mut interval_seq.intervals);
+        interval_seq.intervals = distribute(&element_counts);
+        interval_seq.half_steps = interval_seq.intervals.iter()
+            .fold(0, |acc, interval| acc + interval.get_half_steps());
+        interval_seq.freq_scale = interval_seq.intervals.iter()
+            .fold(Rational::from((1,1)), |acc, interval| acc * interval.get_freq_scale());
         interval_seq
     }
 }
