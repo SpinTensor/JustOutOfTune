@@ -198,7 +198,7 @@ mod test {
     fn get_freq_scale() {
         assert_eq!(IntervalSet::new_from_vals(1,2,-2).get_freq_scale(), Rational::from((80,81)));
     }
-    
+
     #[test]
     fn to_interval_sequence() {
         let interval_set = IntervalSet::new_from_vals(2, 3, -2);
@@ -211,7 +211,7 @@ mod test {
         ref_sequence.add_interval(JustInterval::IPerfectFifth);
         ref_sequence.add_interval(JustInterval::PerfectFourth);
         assert_eq!(interval_set.to_interval_sequence(), ref_sequence);
-    
+
         let interval_set = IntervalSet::new_from_vals(-2, -3, 2);
         let mut ref_sequence = IntervalSequence::new();
         ref_sequence.add_interval(JustInterval::IPerfectFourth);
