@@ -1,7 +1,7 @@
 use num_traits::{Inv};
 use rug::Rational;
 
-#[derive(Debug, PartialEq, Clone, Eq, Hash)]
+#[derive(Debug, PartialEq, Clone, Copy, Eq, Hash)]
 pub enum JustInterval {
     Unison,
     MajorThird,
