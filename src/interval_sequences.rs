@@ -18,16 +18,19 @@ impl IntervalSequence {
         }
     }
 
+    #[cfg(test)]
     pub fn add_interval(&mut self, interval: JustInterval) {
         self.freq_scale *= interval.get_freq_scale();
         self.half_steps += interval.get_half_steps();
         self.intervals.push(interval);
     }
 
+    #[cfg(test)]
     pub fn get_half_steps(&self) -> i32 {
         self.half_steps
     }
 
+    #[cfg(test)]
     pub fn get_freq_scale(&self) -> Rational {
         self.freq_scale.clone()
     }
