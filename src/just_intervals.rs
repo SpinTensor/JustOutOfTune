@@ -3,6 +3,7 @@ use rug::Rational;
 
 #[derive(Debug, PartialEq, Clone, Eq, Hash)]
 pub enum JustInterval {
+    Unison,
     MajorThird,
     IMajorThird,
     PerfectFourth,
@@ -14,6 +15,7 @@ pub enum JustInterval {
 impl JustInterval {
     pub fn get_freq_scale(&self) -> Rational {
         match self {
+            JustInterval::Unison => Rational::from((1,1)),
             JustInterval::MajorThird => Rational::from((5,4)),
             JustInterval::IMajorThird => JustInterval::MajorThird.get_freq_scale().inv(),
             JustInterval::PerfectFourth => Rational::from((4,3)),
@@ -24,6 +26,7 @@ impl JustInterval {
     }
     pub fn get_half_steps(&self) -> i32 {
         match self {
+            JustInterval::Unison => 0,
             JustInterval::MajorThird => 4,
             JustInterval::IMajorThird => -JustInterval::MajorThird.get_half_steps(),
             JustInterval::PerfectFourth => 5,
