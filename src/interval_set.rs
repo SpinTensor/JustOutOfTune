@@ -136,34 +136,16 @@ impl IntervalSet {
     pub fn to_interval_sequence(&self) -> IntervalSequence {
         let mut interval_seq = IntervalSequence::new();
         //major_thirds
-        if self.n_major_third > 0 {
-            for _ in 0..self.n_major_third {
-                interval_seq.add_interval(JustInterval::MajorThird);
-            }
-        } else {
-            for _ in 0..self.n_major_third.abs() {
-                interval_seq.add_interval(JustInterval::IMajorThird);
-            }
+        for _ in 0..self.n_major_third.abs() {
+            interval_seq.add_interval(JustInterval::MajorThird*self.n_major_third);
         }
         //perfect_fourth
-        if self.n_perfect_fourth > 0 {
-            for _ in 0..self.n_perfect_fourth {
-                interval_seq.add_interval(JustInterval::PerfectFourth);
-            }
-        } else {
-            for _ in 0..self.n_perfect_fourth.abs() {
-                interval_seq.add_interval(JustInterval::IPerfectFourth);
-            }
+        for _ in 0..self.n_perfect_fourth.abs() {
+            interval_seq.add_interval(JustInterval::PerfectFourth*self.n_perfect_fourth);
         }
         //perfect_fifth
-        if self.n_perfect_fifth > 0 {
-            for _ in 0..self.n_perfect_fifth {
-                interval_seq.add_interval(JustInterval::PerfectFifth);
-            }   
-        } else {
-            for _ in 0..self.n_perfect_fifth.abs() {
-                interval_seq.add_interval(JustInterval::IPerfectFifth);
-            }   
+        for _ in 0..self.n_perfect_fifth.abs() {
+            interval_seq.add_interval(JustInterval::PerfectFifth*self.n_perfect_fifth);
         }
         distribute(&mut interval_seq.intervals);
         interval_seq
