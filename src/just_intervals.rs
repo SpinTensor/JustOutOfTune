@@ -1,4 +1,6 @@
-use num_traits::{Inv};
+use num_traits::{Inv, };
+use std::ops::{Neg,Mul};
+use std::cmp::{Ordering};
 use rug::Rational;
 
 #[derive(Debug, PartialEq, Clone, Copy, Eq, Hash)]
@@ -37,6 +39,32 @@ impl JustInterval {
     }
 }
 
+impl Neg for JustInterval {
+    type Output = Self;
+    fn neg(self) -> Self::Output {
+        match self {
+            JustInterval::Unison         => self,
+            JustInterval::MajorThird     => JustInterval::IMajorThird,
+            JustInterval::IMajorThird    => JustInterval::MajorThird,
+            JustInterval::PerfectFourth  => JustInterval::IPerfectFourth,
+            JustInterval::IPerfectFourth => JustInterval::PerfectFourth,
+            JustInterval::PerfectFifth   => JustInterval::IPerfectFifth,
+            JustInterval::IPerfectFifth  => JustInterval::PerfectFifth
+        }
+    }
+}
+
+impl Mul<i32> for JustInterval {
+    type Output = Self;
+    fn mul(self, rhs: i32) -> Self::Output {
+        match rhs.cmp(&0) {
+            Ordering::Greater => self,
+            Ordering::Equal   => JustInterval::Unison,
+            Ordering::Less    => -self
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -59,5 +87,36 @@ mod tests {
         assert_eq!(JustInterval::IPerfectFourth.get_half_steps(), -5);
         assert_eq!(JustInterval::PerfectFifth.get_half_steps(),    7);
         assert_eq!(JustInterval::IPerfectFifth.get_half_steps(),  -7);
+    }
+
+    #[test]
+    fn negate() {
+        let options = [JustInterval::Unison,
+                       JustInterval::MajorThird, JustInterval::IMajorThird,
+                       JustInterval::PerfectFourth, JustInterval::IPerfectFourth,
+                       JustInterval::PerfectFifth, JustInterval::IPerfectFifth];
+        for value in options {
+            let negated = -value;
+            assert_eq!(value, -negated);
+            assert_eq!(value.get_half_steps(), -(negated.get_half_steps()));
+            assert_eq!(value.get_freq_scale(), (negated.get_freq_scale().inv()));
+        }
+    }
+
+    #[test]
+    fn multiply() {
+        let options = [JustInterval::Unison,
+                       JustInterval::MajorThird, JustInterval::IMajorThird,
+                       JustInterval::PerfectFourth, JustInterval::IPerfectFourth,
+                       JustInterval::PerfectFifth, JustInterval::IPerfectFifth];
+        for value in options {
+            for factor in 1..3 {
+                assert_eq!(value*factor, value);
+                assert_eq!(value*(-factor), -value);
+            }
+            for factor in [0] {
+                assert_eq!(value*factor, JustInterval::Unison);
+            }
+        }
     }
 }
